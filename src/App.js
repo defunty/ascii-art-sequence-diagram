@@ -1,4 +1,3 @@
-import logo from './logo.svg';
 import './App.css';
 import { useState } from 'react'
 import _ from 'lodash'
@@ -6,6 +5,9 @@ import _ from 'lodash'
 function App() {
   const [boxes, setBoxes] = useState([])
   const [lines, setLines] = useState([])
+
+  const maxBox = 2
+  const maxLine = 10
 
   const onChangeBoxText = (i, event) => {
     const value = event.target.value
@@ -16,7 +18,6 @@ function App() {
 
   const onChangeLineText = (i, event) => {
     const text = event.target.value
-    console.log(text)
     const _lines = _.cloneDeep(lines)
     _lines[i] = {text: text, from: lines[i].from}
     setLines(_lines)
@@ -29,56 +30,65 @@ function App() {
     setLines(_lines)
   }
 
+  const addBox = () => {
+    if (boxes.length >= maxBox) {
+      return
+    } else {
+      setBoxes((prev) => [...prev, ''])
+    }
+  }
+
+  const addLine = () => {
+    if (lines.length >= maxLine) {
+      return
+    } else {
+      setLines((prev) => [...prev, {text: '', from: 'l2r'}])
+    }
+  }
+
   const renderAsciiArt = () => {
     return(
-      <div>
-        <pre>
-          { boxes.map(box =>
-            `
-            |${'-'.repeat(box.length + 2)}|
-            | ${' '.repeat(box.length)} |
-            | ${' '.repeat(box.length)} |
-            | ${box} |
-            | ${' '.repeat(box.length)} |
-            | ${' '.repeat(box.length)} |
-            |${'-'.repeat(box.length + 2)}|
-            `
-          )}
-        </pre>
-      </div>
+      <pre>
+        { boxes.map(box =>
+          `
+          |${'-'.repeat(box.length + 2)}|
+          | ${' '.repeat(box.length)} |
+          | ${' '.repeat(box.length)} |
+          | ${box} |
+          | ${' '.repeat(box.length)} |
+          | ${' '.repeat(box.length)} |
+          |${'-'.repeat(box.length + 2)}|
+          `
+        )}
+      </pre>
     )
   }
 
   return (
     <div className="App">
-      <header className="App-header">
-        <button onClick={() => {setBoxes((prev) => [...prev, ''])}}>addBox</button>
+      <div className="controller">
+        <button onClick={() => addBox()}>addBox (max: {maxBox})</button>
         {boxes.map((value, i) =>
-          <input key={i} type="text" value={value} onChange={(event) => {onChangeBoxText(i, event)}} />
+        <div key={i}>
+          <input placeholder="box name" type="text" value={value} onChange={(event) => {onChangeBoxText(i, event)}} />
+        </div>
         )}
-
-        <button onClick={() => {setLines((prev) => [...prev, {text: '', from: 'l2r'}])}}>addLine</button>
+      </div>
+      <div className="controller">
+        <button onClick={() => addLine()}>addLine (max: {maxLine})</button>
         {lines.map((data,i) =>
           <div key={i}>
-            <input type="text" value={data.text} onChange={(event) => {onChangeLineText(i, event)}} />
+            <input placeholder="line text" type="text" value={data.text} onChange={(event) => {onChangeLineText(i, event)}} />
             <select name="" id="" onChange={(event) => {onChangeLineDirection(i, event)}}>
               <option value="l2r">l2r</option>
               <option value="r2l">r2l</option>
             </select>
           </div>
         )}
-
+      </div>
+      <div>
         {renderAsciiArt()}
-
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      </div>
     </div>
   );
 }
