@@ -51,13 +51,13 @@ function App() {
       <pre>
         { boxes.map(box =>
           `
-          |${'-'.repeat(box.length + 2)}|
-          | ${' '.repeat(box.length)} |
-          | ${' '.repeat(box.length)} |
+          +${'-'.repeat(box.length + 2)}+
+          |${' '.repeat(box.length + 2)}|
+          |${' '.repeat(box.length + 2)}|
           | ${box} |
-          | ${' '.repeat(box.length)} |
-          | ${' '.repeat(box.length)} |
-          |${'-'.repeat(box.length + 2)}|
+          |${' '.repeat(box.length + 2)}|
+          |${' '.repeat(box.length + 2)}|
+          +${'-'.repeat(box.length + 2)}+
           `
         )}
       </pre>
